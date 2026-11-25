@@ -26,6 +26,7 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                     <th>Nome</th>
                     <th>Ingredienti</th>
                     <th>Disposizione</th>
+                    <th>Azioni</th>
                 </tr>
             </thead>
                          
@@ -37,6 +38,7 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                             <td><?= htmlspecialchars($RICETTA['Nome']) ?></td>
                             <td><?= nl2br(htmlspecialchars($RICETTA['Ingredienti'])) ?></td> <!-- nl2br() prende i caratteri di nuova riga e li trasforma in tag <br> per mantenere la giusta formattazione -->
                             <td><?= nl2br(htmlspecialchars($RICETTA['Disposizione'])) ?></td>
+                            <td><a href="elimina.php?id=<?= urlencode((string) $RICETTA['Id']) ?>">Elimina</a></td> 
                         </tr>
                 <?php endforeach; ?>
             </tbody>
