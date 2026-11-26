@@ -1,5 +1,11 @@
 <?php
+session_start();
 require_once __DIR__ . '/db.php';
+
+if (isset($_SESSION['utente'])) {
+    header('Location: index.php');
+    exit;
+}
 
 $messaggio = '';
 
@@ -19,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $sql = "INSERT INTO UTENTE (nome_utente, password_hash) VALUES ('$nome', '$password')";
             $pdo->query($sql);
+
+            $messaggio = 'Registrazione completata con successo. Reindirizzamento in corso...';
+            header('Refresh: 2; url=index.php');
         }
     }
 }

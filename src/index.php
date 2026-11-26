@@ -1,10 +1,10 @@
-
 <?php
+session_start();
 //richiedo una volta il file db.php che si trova su questa directory (__DIR__) cosi lo eseguo e creo l'oggetto di connessione $pdo 
 //poi lo includo in questo file per poter usare la connessione al database
 //require_once serve perche se il comando non va a buon fine PHP gestisce l'errore come specificato nel file db.php
 require_once __DIR__ . '/db.php'; 
-$sql = "SELECT Id, Nome, Ingredienti, Disposizione FROM RICETTE"; // query SQL per selezionare tutte le colonne dalla tabella RICETTE
+$sql = "SELECT Id, Nome, Ingredienti, Disposizione, Autore FROM RICETTE"; // query SQL per selezionare tutte le colonne dalla tabella RICETTE
 $stmt = $pdo->query($sql); //ritorna un oggetto PDOStatement che rappresenta il risultato della query ($sql) eseguita da MySQL !!!NON sono righe pronte all'uso
 $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righe del risultato della query come array associativo e lo salvo nella variabile $RICETTE
 ?>
@@ -26,7 +26,11 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                     <th>Nome</th>
                     <th>Ingredienti</th>
                     <th>Disposizione</th>
-                    <th>Azioni</th>
+                    <?php
+                        if(isset($_SESSION['utente'])) { //controllo se l'utente è loggato
+                            echo '<th>Azioni</th>'; //se loggato aggiungo la colonna Azioni
+                        }
+                    ?>
                 </tr>
             </thead>
                          
@@ -38,11 +42,14 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                             <td><?= htmlspecialchars($RICETTA['Nome']) ?></td>
                             <td><?= nl2br(htmlspecialchars($RICETTA['Ingredienti'])) ?></td> <!-- nl2br() prende i caratteri di nuova riga e li trasforma in tag <br> per mantenere la giusta formattazione -->
                             <td><?= nl2br(htmlspecialchars($RICETTA['Disposizione'])) ?></td>
-                            <td>
-                                <a href="elimina.php?id=<?= urlencode((string) $RICETTA['Id']) ?>">Elimina</a> 
-                                <br>
-                                <a href="modifica.php?id=<?= urlencode((string) $RICETTA['Id']) ?>">Modifica</a>
-                            </td> 
+                            <?php if (isset($_SESSION['utente'])): ?>
+                                <td>
+                                    <?php if ($_SESSION['utente'] === $RICETTA['Autore']): ?>
+                                        <a href="modifica.php?id=<?= urlencode((string) $RICETTA['Id']) ?>">Modifica</a>
+                                        <a href="elimina.php?id=<?= urlencode((string) $RICETTA['Id']) ?>">Elimina</a>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                 <?php endforeach; ?>
             </tbody>

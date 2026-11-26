@@ -1,6 +1,13 @@
 <?php
+session_start();
 require_once __DIR__ . '/db.php';
 
+if (!isset($_SESSION['utente'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$utenteCorrente = $_SESSION['utente'];
 $idRaw = $_GET['id'] ?? ''; // legge il parametro ID arrivato nell'URL, se non esiste assegna una strina vuota tramite operatore ?? e ''
 $id = filter_var($idRaw, FILTER_VALIDATE_INT); // controlla se il valore di idRaw è un intero valido
 
@@ -20,6 +27,10 @@ if ($RICETTA === false) {
     exit;
 }
 
+if ($RICETTA['Autore'] !== $utenteCorrente) {
+    die('Non hai i permessi per modificare questa ricetta.');
+}
+
 $messaggio = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { // questo metodo riporta il tipo di richiesta HTTP fatta dal browser
@@ -31,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // questo metodo riporta il tipo di
     if ($nome === '' || $ingredienti === '' || $disposizione === '') {
         $messaggio = 'Compila tutti i campi prima di salvare la ricetta.';
     } else {
-        $sql = "UPDATE RICETTE SET Nome = '$nome', Ingredienti = '$ingredienti', Disposizione = '$disposizione' WHERE Id = $id";
+        $sql = "UPDATE RICETTE SET Nome = '$nome', Ingredienti = '$ingredienti', Disposizione = '$disposizione' WHERE Id = $id AND Autore = '$utenteCorrente'";
         $pdo->query($sql); // invia al DB la query e la fa eseguire salvando cosi la nuova rcetta
 
         $messaggio = 'Modifica della ricetta salvata con successo';

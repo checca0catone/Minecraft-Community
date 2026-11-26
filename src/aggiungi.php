@@ -1,9 +1,17 @@
 <?php
+session_start();
+
 //richiedo una volta il file db.php che si trova su questa directory (__DIR__) cosi lo eseguo e creo l'oggetto di connessione $pdo 
 //poi lo includo in questo file per poter usare la connessione al database
 //require_once serve perche se il comando non va a buon fine PHP gestisce l'errore come specificato nel file db.php
 require_once __DIR__ . '/db.php'; 
 
+if (!isset($_SESSION['utente'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$autore = $_SESSION['utente'];
 $messaggio = ''; //variabile ora vuota ma che uso poi per salvare messaggi di errore
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') { // questo metodo riporta il tipo di richiesta HTTP fatta dal browser
@@ -15,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // questo metodo riporta il tipo di
     if ($nome === '' || $ingredienti === '' || $disposizione === '') {
         $messaggio = 'Compila tutti i campi prima di salvare la ricetta.';
     } else {
-        $sql = "INSERT INTO RICETTE (Nome, Ingredienti, Disposizione) VALUES ('$nome', '$ingredienti', '$disposizione')";
+        $sql = "INSERT INTO RICETTE (Nome, Ingredienti, Disposizione, Autore) VALUES ('$nome', '$ingredienti', '$disposizione', '$autore')";
         $pdo->query($sql); // invia al DB la query e la fa eseguire salvando cosi la nuova rcetta
 
         $messaggio = 'Ricetta salvata con successo';

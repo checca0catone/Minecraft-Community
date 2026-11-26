@@ -2,6 +2,11 @@
 session_start();
 require_once __DIR__ . '/db.php';
 
+if (isset($_SESSION['utente'])) {
+    header('Location: index.php');
+    exit;
+}
+
 $messaggio = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $utente = $stmt->fetch();
 
         if ($utente !== false && $password === $utente['password_hash']) {
-            $_SESSION['utente'] = $utente['nome_utente'];
+            $_SESSION['utente'] = $utente['nome_utente']; 
             header('Location: index.php');
             exit;
         } else {
