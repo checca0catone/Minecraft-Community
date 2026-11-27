@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // questo metodo riporta il tipo di
 <head>
     <meta charset="UTF-8">
     <title>Community di Minecraft - Aggiungi Ricetta</title>
+    <link rel="stylesheet" href="style.css">
 </head>
     <body>
         <?php require_once __DIR__ . '/nav.php'; ?>

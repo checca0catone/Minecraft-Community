@@ -14,6 +14,7 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
 <head>
     <meta charset="UTF-8">
     <title>Community di Mincraft - Ricette</title>
+    <link rel="stylesheet" href="style.css">
 </head>
     <body>
         <?php require_once __DIR__ . '/nav.php'; //includo il file nav.php per avere il menu di navigazione in tutte le pagine ?>

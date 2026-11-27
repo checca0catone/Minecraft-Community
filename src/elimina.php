@@ -43,6 +43,7 @@ if ($stmt->rowCount() > 0) { // conta righe eliminate, se > 0 allora la ricetta 
 <head>
     <meta charset="UTF-8">
     <title>Community di Minecraft - Elimina Ricetta</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Elimina Ricetta</h1>
