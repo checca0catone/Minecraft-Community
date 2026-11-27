@@ -26,6 +26,7 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                     <th>Nome</th>
                     <th>Ingredienti</th>
                     <th>Disposizione</th>
+                    <th>Autore</th>
                     <?php
                         if(isset($_SESSION['utente'])) { //controllo se l'utente è loggato
                             echo '<th>Azioni</th>'; //se loggato aggiungo la colonna Azioni
@@ -42,6 +43,7 @@ $RICETTE = $stmt->fetchAll(); //uso metodo fetchAll() per ottenere tutte le righ
                             <td><?= htmlspecialchars($RICETTA['Nome']) ?></td>
                             <td><?= nl2br(htmlspecialchars($RICETTA['Ingredienti'])) ?></td> <!-- nl2br() prende i caratteri di nuova riga e li trasforma in tag <br> per mantenere la giusta formattazione -->
                             <td><?= nl2br(htmlspecialchars($RICETTA['Disposizione'])) ?></td>
+                            <td><?= htmlspecialchars($RICETTA['Autore']) ?></td>
                             <?php if (isset($_SESSION['utente'])): ?>
                                 <td>
                                     <?php if ($_SESSION['utente'] === $RICETTA['Autore']): ?>

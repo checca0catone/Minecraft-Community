@@ -20,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->query($sql);
         $utente = $stmt->fetch();
 
-        if ($utente !== false && $password === $utente['password_hash']) {
-            $_SESSION['utente'] = $utente['nome_utente']; 
+        if ($utente && password_verify($password, $utente['password_hash'])) {
+            $_SESSION['utente'] = $utente['nome_utente'];
             header('Location: index.php');
             exit;
         } else {
-            $messaggio = 'Nome utente o password errati.';
+            $messaggio = 'Nome utente o password non validi.';
         }
     }
 }

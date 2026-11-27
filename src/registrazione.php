@@ -23,7 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($utente !== false) {
             $messaggio = 'Questo nome utente è già in uso.';
         } else {
-            $sql = "INSERT INTO UTENTE (nome_utente, password_hash) VALUES ('$nome', '$password')";
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO UTENTE (nome_utente, password_hash) VALUES ('$nome', '$hash')";
             $pdo->query($sql);
 
             $messaggio = 'Registrazione completata con successo. Reindirizzamento in corso...';
@@ -42,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php require_once __DIR__ . '/nav.php'; ?>
     <h1>Effettua la Registrazione</h1>
 
-    <?php if ($messaggio !== '' && $messaggio !== 'Utente registrato con successo'): ?>
+    <?php if ($messaggio !== '' && $messaggio !== 'Utente registrato con successo' && $messaggio !== 'Registrazione completata con successo. Reindirizzamento in corso...'): ?>
         <p style="color: red;"><?= $messaggio ?></p>
     <?php elseif ($messaggio !== ''): ?>
         <p style="color: green;"><?= $messaggio ?></p>
@@ -52,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>
             <label for="nome_utente">Nome Utente:</label><br>
             <input type="text" id="nome_utente" name="Nome_Utente" required>
-            </p>
+        </p>
         <p>
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="Password" required>
